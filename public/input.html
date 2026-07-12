@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>F3RC スコア入力 - iPad</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      max-width: 1000px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+      font-size: 2.5rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .team-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .team-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #667eea;
+      text-align: center;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    label {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input[type='text'] {
+      padding: 15px;
+      font-size: 1.2rem;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      transition: border-color 0.3s;
+    }
+
+    input[type='text']:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    select {
+      padding: 15px;
+      font-size: 1.2rem;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      transition: border-color 0.3s;
+      cursor: pointer;
+      background-color: white;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .item-controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-item {
+      flex: 1;
+      padding: 10px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-weight: bold;
+    }
+
+    .btn-minus {
+      background-color: #ff6b6b;
+      color: white;
+    }
+
+    .btn-minus:hover {
+      background-color: #ff5252;
+    }
+
+    .btn-plus {
+      background-color: #51cf66;
+      color: white;
+    }
+
+    .btn-plus:hover {
+      background-color: #40c057;
+    }
+
+    .item-value {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      padding: 10px;
+      background-color: #f1f3f5;
+      border-radius: 8px;
+    }
+
+    .score-display {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      padding: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 40px;
+      justify-content: center;
+    }
+
+    .btn-reset {
+      background-color: #868e96;
+      color: white;
+      padding: 15px 40px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+
+    .btn-reset:hover {
+      background-color: #748085;
+      transform: translateY(-2px);
+    }
+
+    .status-message {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.1rem;
+      min-height: 30px;
+      font-weight: bold;
+    }
+
+    .status-message.sync {
+      color: #51cf66;
+    }
+
+    .status-message.error {
+      color: #ff6b6b;
+    }
+
+    .auto-sync-indicator {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background: rgba(81, 207, 102, 0.9);
+      color: white;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    .auto-sync-indicator.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="auto-sync-indicator" id="syncIndicator">✅ 自動同期中...</div>
+
+  <div class="container">
+    <h1>🎮 F3RC スコア入力</h1>
+
+    <div class="form-row">
+      <!-- 左チーム -->
+      <div class="team-section">
+        <div class="team-title">左チーム</div>
+
+        <div class="form-group">
+          <label for="leftUniversity">チーム名</label>
+          <select id="leftUniversity" onchange="handleTeamChange('left')">
+            <option value="">選択してください</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>スコア</label>
+          <div class="score-display" id="leftScoreDisplay">0</div>
+        </div>
+
+        <div class="form-group">
+          <label>パイナップル (0〜5)</label>
+          <div class="item-controls">
+            <button class="btn-item btn-minus" onclick="changeItem('leftPine', -1)">
+              −
+            </button>
+            <div class="item-value" id="leftPineDisplay">0</div>
+            <button class="btn-item btn-plus" onclick="changeItem('leftPine', 1)">
+              +
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>チョコレート (0〜5)</label>
+          <div class="item-controls">
+            <button class="btn-item btn-minus" onclick="changeItem('leftChoco', -1)">
+              −
+            </button>
+            <div class="item-value" id="leftChocoDisplay">0</div>
+            <button class="btn-item btn-plus" onclick="changeItem('leftChoco', 1)">
+              +
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>パンケーキ (0〜3)</label>
+          <div class="item-controls">
+            <button class="btn-item btn-minus" onclick="changeItem('leftBread', -1)">
+              −
+            </button>
+            <div class="item-value" id="leftBreadDisplay">0</div>
+            <button class="btn-item btn-plus" onclick="changeItem('leftBread', 1)">
+              +
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右チーム -->
+      <div class="team-section">
+        <div class="team-title">右チーム</div>
+
+        <div class="form-group">
+          <label for="rightUniversity">チーム名</label>
+          <select id="rightUniversity" onchange="handleTeamChange('right')">
+            <option value="">選択してください</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>スコア</label>
+          <div class="score-display" id="rightScoreDisplay">0</div>
+        </div>
+
+        <div class="form-group">
+          <label>パイナップル (0〜5)</label>
+          <div class="item-controls">
+            <button class="btn-item btn-minus" onclick="changeItem('rightPine', -1)">
+              −
+            </button>
+            <div class="item-value" id="rightPineDisplay">0</div>
+            <button class="btn-item btn-plus" onclick="changeItem('rightPine', 1)">
+              +
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>チョコレート (0〜5)</label>
+          <div class="item-controls">
+            <button class="btn-item btn-minus" onclick="changeItem('rightChoco', -1)">
+              −
+            </button>
+            <div class="item-value" id="rightChocoDisplay">0</div>
+            <button class="btn-item btn-plus" onclick="changeItem('rightChoco', 1)">
+              +
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>パンケーキ (0〜3)</label>
+          <div class="item-controls">
+            <button class="btn-item btn-minus" onclick="changeItem('rightBread', -1)">
+              −
+            </button>
+            <div class="item-value" id="rightBreadDisplay">0</div>
+            <button class="btn-item btn-plus" onclick="changeItem('rightBread', 1)">
+              +
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button class="btn-reset" onclick="resetForm()">
+        🔄 リセット
+      </button>
+    </div>
+
+    <div class="status-message" id="statusMessage"></div>
+  </div>
+
+  <script src="./config.js"></script>
+  <script src="./input.js"></script>
+</body>
+</html>

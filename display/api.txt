@@ -1,7 +1,0 @@
-const apiKeys = [
-    'AIzaSyCycowG3GCqzemN0Pd7bXa2fA6Qpkw2Kx0',
-    'AIzaSyD3Uqdnk5FWJc9fEaAd97uFfy40NMguLF4',
-    'AIzaSyAsrBi3RNeTrU3lS_8Z9BbXqbUvmr9QxyA',
-    'AIzaSyBG9vWU7wU5a2ZVqxb_p3zgveML_mRjnb0',
-    "AIzaSyA9lVXZhi4zij1WelXRilJelHr5c-zSSeU"
-];

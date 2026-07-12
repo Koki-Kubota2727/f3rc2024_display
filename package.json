@@ -1,0 +1,18 @@
+{
+  "name": "f3rc2024-display",
+  "version": "2.0.0",
+  "description": "F3RC リアルタイムディスプレイシステム",
+  "main": "server/app.js",
+  "scripts": {
+    "start": "node server/app.js",
+    "dev": "nodemon server/app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.13.0",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

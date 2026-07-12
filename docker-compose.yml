@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: f3rc_postgres
+    environment:
+      POSTGRES_USER: f3rc_user
+      POSTGRES_PASSWORD: f3rc_password
+      POSTGRES_DB: f3rc_display
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./server/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  node:
+    build: .
+    container_name: f3rc_node
+    environment:
+      NODE_ENV: production
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: f3rc_display
+      DB_USER: f3rc_user
+      DB_PASSWORD: f3rc_password
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./server:/app/server
+      - ./public:/app/public
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

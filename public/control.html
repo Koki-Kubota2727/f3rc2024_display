@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>F3RC タイマー制御</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 2rem;
+    }
+
+    .status-display {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+      padding: 20px;
+      background-color: #f1f3f5;
+      border-radius: 10px;
+      font-weight: bold;
+      color: #667eea;
+    }
+
+    .control-section {
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #667eea;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .btn {
+      padding: 20px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+      text-transform: uppercase;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn:active {
+      transform: translateY(-1px);
+    }
+
+    .btn-set {
+      background-color: #a9e34b;
+      color: #333;
+    }
+
+    .btn-set:hover {
+      background-color: #94d82d;
+    }
+
+    .btn-setting {
+      background-color: #ffd93d;
+      color: #333;
+    }
+
+    .btn-setting:hover {
+      background-color: #ffb700;
+    }
+
+    .btn-stop {
+      background-color: #ff6b6b;
+      color: white;
+    }
+
+    .btn-stop:hover {
+      background-color: #ff5252;
+    }
+
+    .btn-ready {
+      background-color: #748dbf;
+      color: white;
+    }
+
+    .btn-ready:hover {
+      background-color: #5f7ba1;
+    }
+
+    .btn-running {
+      background-color: #00d084;
+      color: white;
+    }
+
+    .btn-running:hover {
+      background-color: #00c071;
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .btn-reset {
+      background-color: #868e96;
+      color: white;
+      padding: 20px;
+      font-size: 1.2rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .btn-reset:hover {
+      background-color: #748085;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .status-message {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.1rem;
+      min-height: 30px;
+      font-weight: bold;
+    }
+
+    .status-message.success {
+      color: #51cf66;
+    }
+
+    .status-message.error {
+      color: #ff6b6b;
+    }
+
+    .info-box {
+      background-color: #e7f5ff;
+      border-left: 4px solid #667eea;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    .info-box strong {
+      color: #667eea;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⏱️ タイマー制御</h1>
+
+    <div class="status-display" id="statusDisplay">
+      現在の状態: <span id="currentStatus">読み込み中...</span>
+    </div>
+
+    <div class="control-section">
+      <div class="section-title">タイマー状態</div>
+      <div class="button-grid">
+        <button class="btn btn-set" onclick="setTimerState(1)">
+          SET<br />待機
+        </button>
+        <button class="btn btn-setting" onclick="setTimerState(2)">
+          SETTING<br />60秒
+        </button>
+        <button class="btn btn-stop" onclick="setTimerState(3)">
+          STOP<br />停止
+        </button>
+        <button class="btn btn-ready" onclick="setTimerState(4)">
+          READY<br />レディ
+        </button>
+        <button class="btn btn-running" onclick="setTimerState(5)">
+          ▶️ START<br />本番
+        </button>
+      </div>
+    </div>
+
+    <div class="control-section">
+      <div class="section-title">その他</div>
+      <div class="action-buttons">
+        <button class="btn-reset" onclick="resetMatch()">
+          🔄 試合全体をリセット
+        </button>
+      </div>
+    </div>
+
+    <div class="status-message" id="statusMessage"></div>
+
+    <div class="info-box">
+      <strong>ℹ️ 状態説明:</strong><br />
+      • SET: 試合開始前の待機状態<br />
+      • SETTING: セッティングタイマー（60秒）<br />
+      • STOP: タイマー一時停止<br />
+      • READY: 本番前レディ状態<br />
+      • START: 本番タイマー実行（3秒カウント→GO!→3分カウントダウン）
+    </div>
+  </div>
+
+  <script src="./control.js"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./style.css" />
+  <title>F3RC ディスプレイ - リアルタイム表示</title>
+</head>
+<body>
+  <!-- 背景画像 -->
+  <img src="./images/background.png" alt="背景画像" id="display" />
+
+  <!-- チョコレート左 -->
+  <div id="chocoContainerLeft">
+    <img src="./images/choco.png" alt="チョコ画像1" class="choco-left" />
+    <img src="./images/choco.png" alt="チョコ画像2" class="choco-left" />
+    <img src="./images/choco.png" alt="チョコ画像3" class="choco-left" />
+    <img src="./images/choco.png" alt="チョコ画像4" class="choco-left" />
+    <img src="./images/choco.png" alt="チョコ画像5" class="choco-left" />
+  </div>
+
+  <!-- パイナップル左 -->
+  <div id="pineContainerLeft">
+    <img src="./images/pine.png" alt="パイン画像1" class="pine-left" />
+    <img src="./images/pine.png" alt="パイン画像2" class="pine-left" />
+    <img src="./images/pine.png" alt="パイン画像3" class="pine-left" />
+    <img src="./images/pine.png" alt="パイン画像4" class="pine-left" />
+    <img src="./images/pine.png" alt="パイン画像5" class="pine-left" />
+  </div>
+
+  <!-- パンケーキ左 -->
+  <div id="breadContainerLeft">
+    <img src="./images/bread.png" alt="パンケーキ画像1" class="bread-left" />
+    <img src="./images/bread.png" alt="パンケーキ画像2" class="bread-left" />
+    <img src="./images/bread.png" alt="パンケーキ画像3" class="bread-left" />
+  </div>
+
+  <!-- チョコレート右 -->
+  <div id="chocoContainerRight">
+    <img src="./images/choco.png" alt="チョコ画像6" class="choco-right" />
+    <img src="./images/choco.png" alt="チョコ画像7" class="choco-right" />
+    <img src="./images/choco.png" alt="チョコ画像8" class="choco-right" />
+    <img src="./images/choco.png" alt="チョコ画像9" class="choco-right" />
+    <img src="./images/choco.png" alt="チョコ画像10" class="choco-right" />
+  </div>
+
+  <!-- パイナップル右 -->
+  <div id="pineContainerRight">
+    <img src="./images/pine.png" alt="パイン画像6" class="pine-right" />
+    <img src="./images/pine.png" alt="パイン画像7" class="pine-right" />
+    <img src="./images/pine.png" alt="パイン画像8" class="pine-right" />
+    <img src="./images/pine.png" alt="パイン画像9" class="pine-right" />
+    <img src="./images/pine.png" alt="パイン画像10" class="pine-right" />
+  </div>
+
+  <!-- パンケーキ右 -->
+  <div id="breadContainerRight">
+    <img src="./images/bread.png" alt="パンケーキ画像4" class="bread-right" />
+    <img src="./images/bread.png" alt="パンケーキ画像5" class="bread-right" />
+    <img src="./images/bread.png" alt="パンケーキ画像6" class="bread-right" />
+  </div>
+
+  <!-- ポイント1 -->
+  <div id="point1">loading...</div>
+
+  <!-- ポイント2 -->
+  <div id="point2">loading...</div>
+
+  <!-- タイマー -->
+  <div id="timer"></div>
+
+  <!-- 左側のチーム -->
+  <div id="leftUniversity">now_loading...</div>
+
+  <!-- 右側のチーム -->
+  <div id="rightUniversity">now_loading</div>
+
+  <!-- ボナペティ1 -->
+  <img src="./images/bon.png" id="bon1" alt="ボナペティ1" />
+
+  <!-- ボナペティ2 -->
+  <img src="./images/bon.png" id="bon2" alt="ボナペティ2" />
+
+  <audio src="./start.mp3" id="music"></audio>
+  <script src="./config.js"></script>
+  <script src="./display.js"></script>
+</body>
+</html>
